@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>Register</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-</body>
-</html>
+{% extends 'catalog/layout.html' %}
+{% load static %}
+
+{% block content %}
+    <div style="margin-top: 100px; margin-bottom: 100px; display: flex; justify-content: center;">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div style="text-align:center">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

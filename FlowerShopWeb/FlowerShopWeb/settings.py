@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'catalog',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-LOGIN_REDIRECT_URL = 'home'  # или другой URL
-LOGOUT_REDIRECT_URL = 'home'  # или другой URL
+LOGIN_REDIRECT_URL = 'catalog'  # или другой URL
+LOGOUT_REDIRECT_URL = 'catalog'  # или другой URL
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

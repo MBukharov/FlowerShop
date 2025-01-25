@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from .forms import CustomUserRegisterForm, CustomUserLoginForm
+from django.contrib.auth import logout
 
 def register(request):
     if request.method == 'POST':
@@ -21,10 +22,14 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('catalog')
     else:
         form = CustomUserLoginForm()
     return render(request, 'users/login.html', {'form': form})
 
 def home(request):
     return render(request, 'users/home.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('catalog')
