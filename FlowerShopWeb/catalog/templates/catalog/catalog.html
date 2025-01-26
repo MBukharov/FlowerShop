@@ -2,6 +2,23 @@
 
 {% load static %}
 {% block content%}
-    <h1 style="text-align: center;"> Цветы </h1>
-
+<div class="container" style="margin-top:50px">
+  <div class="row">
+   {% for flower in flowers %}
+    {% if flower.quantity > 0 %}
+    <div class="card" style="width: 22rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 10px;margin-bottom: 50px; margin-left: 20px">
+        <img src="{{flower.picture.url}}" class="card-img-top" alt="Изображение">
+        <div class="card-body" style="flex-grow: 1;">
+            <h5 class="card-title">{{flower.name}}</h5>
+            <p class="card-text">{{flower.description}}</p>
+        </div>
+        <div style="margin-top: auto;">
+            <h5 class="card-title">{{flower.price}} руб.</h5>
+            <a href="#" class="btn btn-primary">Заказать</a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
