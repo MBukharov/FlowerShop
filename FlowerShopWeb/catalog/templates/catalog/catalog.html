@@ -3,6 +3,7 @@
 {% load static %}
  {% load my_filters %}
 {% block content%}
+
 <div class="container" style="margin-top:50px">
   <div class="row">
    {% for flower in flowers %}
@@ -15,11 +16,64 @@
         </div>
         <div style="margin-top: auto;">
             <h5 class="card-title">{{flower.price}} руб.</h5>
-            <a href="#" class="btn btn-primary">Заказать</a>
+            <button
+                class="btn btn-primary order-button"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasWithBothOptions"
+                aria-controls="offcanvasWithBothOptions"
+                data-flower-name="{{flower.name}}"
+                data-flower-price="{{flower.price}}"
+                data-flower-image="{{flower.picture.url|slice_from_eighth}}"
+            >Заказать</button>
         </div>
     </div>
     {% endif %}
     {% endfor %}
   </div>
 </div>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Заказать букет</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="selected-flower">
+      <img id="flower-image" src="" alt="flower image" width="200px"">
+      <h5 id="flower-name"></h5>
+      <h5 id="flower-price"></h5>
+    </div>
+    <form>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Телефон</label>
+        <input type="text" class="form-control" id="phone" placeholder="Введите ваш телефон">
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">Адрес доставки</label>
+        <input type="text" class="form-control" id="address" placeholder="Введите адрес доставки">
+      </div>
+      <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderButtons = document.querySelectorAll('.order-button');
+
+    orderButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const flowerName = button.getAttribute('data-flower-name');
+            const flowerPrice = button.getAttribute('data-flower-price');
+            const flowerImage = button.getAttribute('data-flower-image');
+
+            document.getElementById('flower-name').textContent = flowerName;
+            document.getElementById('flower-price').textContent = `${flowerPrice} руб.`;
+            document.getElementById('flower-image').src = flowerImage;
+        });
+    });
+});
+</script>
+
 {% endblock %}
