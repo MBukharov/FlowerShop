@@ -39,22 +39,26 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
   </div>
   <div class="offcanvas-body">
-    <div id="selected-flower">
-      <img id="flower-image" src="" alt="flower image" width="200px"">
-      <h5 id="flower-name"></h5>
-      <h5 id="flower-price"></h5>
-    </div>
-    <form>
-      <div class="mb-3">
-        <label for="phone" class="form-label">Телефон</label>
-        <input type="text" class="form-control" id="phone" placeholder="Введите ваш телефон">
-      </div>
-      <div class="mb-3">
-        <label for="address" class="form-label">Адрес доставки</label>
-        <input type="text" class="form-control" id="address" placeholder="Введите адрес доставки">
-      </div>
-      <button type="submit" class="btn btn-primary">Оформить заказ</button>
-    </form>
+      {% if request.user.is_authenticated %}
+        <div id="selected-flower">
+          <img id="flower-image" src="" alt="flower image" width="200px">
+          <h5 id="flower-name"></h5>
+          <h5 id="flower-price"></h5>
+        </div>
+        <form>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Телефон</label>
+            <input type="text" class="form-control" id="phone" placeholder="Введите ваш телефон">
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Адрес доставки</label>
+            <input type="text" class="form-control" id="address" placeholder="Введите адрес доставки">
+          </div>
+          <button type="submit" class="btn btn-primary">Оформить заказ</button>
+        </form>
+      {% else %}
+        <h6><a href="/login">Войдите</a> в аккаунт для заказа</h6>
+      {% endif %}
   </div>
 </div>
 
