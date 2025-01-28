@@ -1,0 +1,23 @@
+{% extends 'catalog/layout.html' %}
+
+{% load static %}
+ {% load my_filters %}
+{% block content%}
+
+<h2>Корзина</h2>
+{% if cart.items.all %}
+    <ul>
+        {% for item in cart.items.all %}
+            <li>
+                {{ item.product.name }} - {{ item.quantity }} шт.
+                <a href="{% url 'remove_from_cart' item.product.id %}">Удалить</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <p>Общая сумма: {{ total_sum }}</p>
+{% else %}
+    <p>Ваша корзина пуста.</p>
+{% endif %}
+<a href="{% url 'catalog' %}">Продолжить покупки</a>
+
+{% endblock %}

@@ -16,16 +16,17 @@
         </div>
         <div style="margin-top: auto;">
             <h5 class="card-title">{{flower.price}} руб.</h5>
-            <button
-                class="btn btn-primary order-button"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasWithBothOptions"
-                aria-controls="offcanvasWithBothOptions"
-                data-flower-name="{{flower.name}}"
-                data-flower-price="{{flower.price}}"
-                data-flower-image="{{flower.picture.url|slice_from_eighth}}"
-            >Заказать</button>
+<!--            <button-->
+<!--                class="btn btn-primary order-button"-->
+<!--                type="button"-->
+<!--                data-bs-toggle="offcanvas"-->
+<!--                data-bs-target="#offcanvasWithBothOptions"-->
+<!--                aria-controls="offcanvasWithBothOptions"-->
+<!--                data-flower-name="{{flower.name}}"-->
+<!--                data-flower-price="{{flower.price}}"-->
+<!--                data-flower-image="{{flower.picture.url|slice_from_eighth}}"-->
+<!--            >Заказать</button>-->
+            <button class="btn btn-primary order-button"><a href="cart/add/{{flower.id}}/">В корзину</a></button>
         </div>
     </div>
     {% endif %}
