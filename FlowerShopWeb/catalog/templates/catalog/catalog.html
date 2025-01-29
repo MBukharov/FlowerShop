@@ -52,6 +52,7 @@
 <div id="modal-message" class="modalcart hidden">
     <div class="content">
         <p id="modal-text"></p>
+        <p><a href="{% url 'cart_detail' %}">Перейти в корзину</a></p>
     </div>
 </div>
 <style>
@@ -67,7 +68,7 @@
     z-index: 1000;
     display: none;
     width: 400px;
-    height: 70px;
+    height: 120px;
     overflow: hidden;
     }
 

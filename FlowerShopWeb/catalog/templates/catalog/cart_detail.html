@@ -4,20 +4,32 @@
  {% load my_filters %}
 {% block content%}
 
-<h2>Корзина</h2>
-{% if cart.items.all %}
-    <ul>
-        {% for item in cart.items.all %}
-            <li>
-                {{ item.product.name }} - {{ item.quantity }} шт.
-                <a href="{% url 'remove_from_cart' item.product.id %}">Удалить</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <p>Общая сумма: {{ total_sum }}</p>
-{% else %}
-    <p>Ваша корзина пуста.</p>
-{% endif %}
-<a href="{% url 'catalog' %}">Продолжить покупки</a>
+<div class="container mt-5">
+    <h2 class="mb-4">Корзина</h2>
+    {% if cart.items.all %}
+        <ul class="list-group mb-3">
+            {% for item in cart.items.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ item.product.picture.url|slice_from_eighth }}" alt="{{ item.product.name }}" class="img-thumbnail mr-3" width="80">
+                        <div style="margin-left:20px">
+                            <h5 class="mb-1">{{ item.product.name }}</h5>
+                            <small class="text-muted">{{ item.product.price }} руб.</small>
+                        </div>
+                    </div>
+                    <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="alert alert-info">
+            <strong> Общая сумма: <span style="margin-left:20px">{{ total_sum }} руб.</span></strong>
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Ваша корзина пуста.
+        </div>
+    {% endif %}
+    <a href="{% url 'catalog' %}" class="btn btn-primary">Продолжить покупки</a>
+</div>
 
 {% endblock %}

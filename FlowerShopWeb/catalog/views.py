@@ -19,7 +19,7 @@ def add_to_cart(request):
 
         cart, created = Cart.objects.get_or_create(user=request.user)
         cart_item, created = cart.items.get_or_create(product=product)
-        cart_item.quantity += quantity
+        cart_item.quantity = 1
         cart_item.save()
 
         return JsonResponse({'message': 'Товар добавлен в корзину', 'quantity': cart_item.quantity})

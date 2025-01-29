@@ -17,7 +17,8 @@
       <span class="navbar-text">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if request.user.is_authenticated %}
-            <li class="navbar-brand"><a class="nav-link" href="#">{{ request.user.username }}</a></li>
+            <li class="navbar-brand"><a class="nav-link" href="{% url 'cart_detail' %}">Корзина</a></li>
+            <li class="navbar-brand"><a class="nav-link" href="#">Профиль</a></li>
             <li class="navbar-brand"><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
           {% else %}
             <li class="navbar-brand"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
