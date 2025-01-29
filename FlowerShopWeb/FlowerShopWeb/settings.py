@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'catalog',
+    'django.contrib.humanize',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',

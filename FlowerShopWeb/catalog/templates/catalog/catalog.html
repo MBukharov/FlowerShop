@@ -2,6 +2,7 @@
 
 {% load static %}
  {% load my_filters %}
+{% load humanize %}
 {% block content%}
 
 <div class="container" style="margin-top:50px">
@@ -15,7 +16,7 @@
             <p class="card-text">{{flower.description}}</p>
         </div>
         <div style="margin-top: auto;">
-            <h5 class="card-title">{{flower.price}} руб.</h5>
+            <h5 class="card-title">{{flower.price|intcomma}} руб.</h5>
                 {% if request.user.is_authenticated %}
                     <button class="add-to-cart btn btn-primary order-button" data-product-id="{{ flower.id }}">В корзину</button>
                 {% else %}
