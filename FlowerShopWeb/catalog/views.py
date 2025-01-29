@@ -11,13 +11,19 @@ def catalog(request):
     return render(request, 'catalog/catalog.html', {'flowers': flowers})
 
 @login_required
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Flower, id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    cart_item.quantity += 1
-    cart_item.save()
-    return redirect('catalog')
+def add_to_cart(request):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        product_id = request.POST.get('product_id')
+        quantity = int(request.POST.get('quantity', 1))
+        product = get_object_or_404(Flower, id=product_id)
+
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = cart.items.get_or_create(product=product)
+        cart_item.quantity += quantity
+        cart_item.save()
+
+        return JsonResponse({'message': 'Товар добавлен в корзину', 'quantity': cart_item.quantity})
+    return JsonResponse({'error': 'Неверный запрос'}, status=400)
 
 @login_required
 def remove_from_cart(request, product_id):

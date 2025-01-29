@@ -26,7 +26,8 @@
 <!--                data-flower-price="{{flower.price}}"-->
 <!--                data-flower-image="{{flower.picture.url|slice_from_eighth}}"-->
 <!--            >Заказать</button>-->
-            <button class="btn btn-primary order-button"><a href="cart/add/{{flower.id}}/">В корзину</a></button>
+<!--            <button class="btn btn-primary order-button"><a href="cart/add/{{flower.id}}/">В корзину</a></button>-->
+                <button class="add-to-cart btn btn-primary order-button" data-product-id="{{ flower.id }}">В корзину</button>
         </div>
     </div>
     {% endif %}
@@ -35,50 +36,84 @@
 </div>
 
 <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Заказать букет</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
-  </div>
   <div class="offcanvas-body">
-      {% if request.user.is_authenticated %}
-        <div id="selected-flower">
-          <img id="flower-image" src="" alt="flower image" width="200px">
-          <h5 id="flower-name"></h5>
-          <h5 id="flower-price"></h5>
-        </div>
-        <form>
-          <div class="mb-3">
-            <label for="phone" class="form-label">Телефон</label>
-            <input type="text" class="form-control" id="phone" placeholder="Введите ваш телефон">
-          </div>
-          <div class="mb-3">
-            <label for="address" class="form-label">Адрес доставки</label>
-            <input type="text" class="form-control" id="address" placeholder="Введите адрес доставки">
-          </div>
-          <button type="submit" class="btn btn-primary">Оформить заказ</button>
-        </form>
-      {% else %}
-        <h6><a href="/login">Войдите</a> в аккаунт для заказа</h6>
-      {% endif %}
+         <h4><a href="/login">Войдите</a> в аккаунт для заказа</h4>
   </div>
 </div>
 
+<!-- Модальное окно -->
+<div id="modal-message" class="modal hidden">
+    <div class="content">
+        <p id="modal-text"></p>
+    </div>
+</div>
+<style>
+    .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: pink;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    width: 400px;
+    height: 70px;
+    overflow: hidden;
+    }
+
+.hidden {
+    display: none;
+}
+
+.content {
+    text-align: center;
+    font-size: 20px;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const orderButtons = document.querySelectorAll('.order-button');
+    $(document).ready(function() {
+        $('.add-to-cart').click(function() {
+            var button = $(this);
+            var productId = button.data('product-id');
+            var quantity = 1; // или возьмите значение из поля ввода, если оно у вас есть
 
-    orderButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const flowerName = button.getAttribute('data-flower-name');
-            const flowerPrice = button.getAttribute('data-flower-price');
-            const flowerImage = button.getAttribute('data-flower-image');
-
-            document.getElementById('flower-name').textContent = flowerName;
-            document.getElementById('flower-price').textContent = `${flowerPrice} руб.`;
-            document.getElementById('flower-image').src = flowerImage;
+            $.ajax({
+                url: '{% url "add_to_cart" %}',
+                method: 'POST',
+                data: {
+                    product_id: productId,
+                    quantity: quantity,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    showModal(response.message);
+                    // Обновите интерфейс корзины или количество
+                },
+                error: function(response) {
+                    showModal('Произошла ошибка: ' + response.responseJSON.error);
+                }
+            });
         });
+
+        function showModal(message) {
+            var modal = $('#modal-message');
+            $('#modal-text').text(message);
+            modal.removeClass('hidden');
+            modal.fadeIn();
+
+            setTimeout(function() {
+                modal.fadeOut(function() {
+                    modal.addClass('hidden');
+                });
+            }, 2000);
+        }
     });
-});
 </script>
+
 
 {% endblock %}
