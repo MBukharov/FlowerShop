@@ -18,7 +18,22 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% if request.user.is_authenticated %}
             <li class="navbar-brand"><a class="nav-link" href="{% url 'cart_detail' %}">Корзина</a></li>
-            <li class="navbar-brand"><a class="nav-link" href="#">Профиль</a></li>
+            <li class="navbar-brand">
+              <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Профиль
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                      <li><a class="dropdown-item" href="#">Мои заказы</a></li>
+                      <li><a class="dropdown-item" href="{% url 'account' %}">Настройки профиля</a></li>
+<!--                      <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>-->
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </li>
             <li class="navbar-brand"><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
           {% else %}
             <li class="navbar-brand"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>

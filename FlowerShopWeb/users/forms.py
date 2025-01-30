@@ -33,3 +33,17 @@ class CustomUserRegisterForm(UserCreationForm):
 class CustomUserLoginForm(AuthenticationForm):
     username = forms.CharField(label='Username')
     password = forms.CharField(widget=forms.PasswordInput)
+
+class UserChangeForm(forms.ModelForm):
+
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-input'}))
+    name = forms.CharField(label='Ваше имя', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    phone = forms.CharField(label='Телефон', widget=forms.TextInput(attrs={'class': 'form-input'}))
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'name', 'phone']
+        widgets = {
+            'password': forms.PasswordInput(),  # Если вы хотите также изменить пароль
+        }

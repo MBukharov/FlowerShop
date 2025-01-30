@@ -1,0 +1,40 @@
+{% extends 'catalog/layout.html' %}
+{% load static %}
+
+{% block content %}
+
+<div style="margin-top: 10px; display: flex; justify-content: center">
+    {% if messages %}
+            <ul class="list-group">
+                {% for message in messages %}
+                    <li class="list-group-item
+                               {% if message.tags == 'error' %}
+                                   list-group-item-danger
+                               {% elif message.tags == 'success' %}
+                                   list-group-item-success
+                               {% elif message.tags == 'warning' %}
+                                   list-group-item-warning
+                               {% elif message.tags == 'info' %}
+                                   list-group-item-info
+                               {% endif %}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+    {% endif %}
+</div>
+
+    <div class="container mt-5" style="margin-top: 100px; margin-bottom: 100px; display: flex; justify-content: center; text-align:right">
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div style="text-align:center">
+                <button type="submit" class="btn btn-primary">Изменить</button>
+            </div>
+        </form>
+    </div>
+
+
+
+{% endblock %}

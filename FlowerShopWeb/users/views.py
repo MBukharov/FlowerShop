@@ -3,6 +3,9 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from .forms import CustomUserRegisterForm, CustomUserLoginForm
 from django.contrib.auth import logout
+from django.contrib import messages
+from .forms import UserChangeForm
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -33,3 +36,17 @@ def home(request):
 def logout_view(request):
     logout(request)
     return redirect('catalog')
+
+
+@login_required
+def account_data(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ваши данные были успешно обновлены!')
+            return redirect('account')  # Перенаправление на ту же страницу
+    else:
+        form = UserChangeForm(instance=request.user)
+
+    return render(request, 'users/account.html', {'form': form})
