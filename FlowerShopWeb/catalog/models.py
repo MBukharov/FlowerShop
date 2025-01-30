@@ -5,7 +5,7 @@ from users.models import CustomUser
 class Flower(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название товара")
     description = models.TextField(verbose_name="Описание")
-    price = models.FloatField(verbose_name="Цена")
+    price = models.DecimalField(verbose_name="Цена", max_digits=10, decimal_places=2)
     quantity = models.IntegerField(verbose_name="Доступно к заказу")
     picture = models.ImageField(upload_to = 'catalog/static/catalog/img', verbose_name="Изображение")
 

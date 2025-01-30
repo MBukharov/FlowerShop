@@ -1,0 +1,66 @@
+{% extends 'catalog/layout.html' %}
+{% load static %}
+ {% load my_filters %}
+
+{% block content %}
+
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Мои заказы</h1>
+
+    {% if my_orders %}
+        {% for order in my_orders %}
+            <div class="order mb-5">
+                <div class="order-header mb-3">
+                    <div><strong>№ заказа:</strong> {{ order.id }}</div>
+                    <div><strong>Дата заказа:</strong> {{ order.date }}</div>
+                    <div><strong>Сумма заказа:</strong> {{ order.sum }}</div>
+                    <div><strong>Адрес доставки:</strong> {{ order.delivery_address }}</div>
+                    <div><strong>Статус заказа:</strong> <span class="badge bg-info">{{ order.status }}</span></div>
+                </div>
+                <div class="order-products">
+                    <h5>Продукты:</h5>
+                    <ul class="list-unstyled">
+                        {% for product in order.products.all %}
+                            <li class="d-flex align-items-start my-2">
+                                <img src="{{ product.picture.url|slice_from_eighth }}" alt="{{ product.name }}" class="me-3" width="50">
+                                <div>
+                                    <h5 class="mt-0 mb-1 product-name">{{ product.name }}</h5> <!-- Добавляем класс для уменьшения шрифта -->
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="alert alert-info text-center">У вас нет заказов.</p>
+    {% endif %}
+</div>
+
+<!-- Кастомный CSS для дополнительного оформления -->
+<style>
+    .order {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .order-header div {
+        margin-bottom: 10px;
+    }
+    .order-products h5 {
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 1rem; /* Уменьшаем размер шрифта */
+    }
+    .order-products img {
+        border-radius: 5px;
+    }
+    .product-name {
+        font-size: 0.9rem; /* Уменьшаем размер наименований товаров */
+    }
+</style>
+
+
+{% endblock %}

@@ -33,6 +33,7 @@ def make_order(request):
                 user=user,
                 delivery_address=order_form.cleaned_data['delivery_address'],
                 phone_number=order_form.cleaned_data['phone_number'],
+                sum = sum(item.product.price * item.quantity for item in cart.items.all()),
                 status='СБОРКА',  # или другой начальный статус
                 date=timezone.now()
             )
@@ -44,6 +45,7 @@ def make_order(request):
                     product=item.product,
                     quantity=item.quantity
                 )
+                # print(f"{item.product.name} x {item.quantity} for Order {order.id}")
 
             # Очищаем корзину
             cart_items.delete()

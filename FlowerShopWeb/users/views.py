@@ -6,6 +6,7 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from .forms import UserChangeForm
 from django.contrib.auth.decorators import login_required
+from order.models import Order
 
 def register(request):
     if request.method == 'POST':
@@ -50,3 +51,10 @@ def account_data(request):
         form = UserChangeForm(instance=request.user)
 
     return render(request, 'users/account.html', {'form': form})
+
+@login_required
+def my_orders(request):
+    user = request.user
+    my_orders = Order.objects.filter(user=user)
+
+    return render(request, 'users/my_orders.html', {'my_orders': my_orders})

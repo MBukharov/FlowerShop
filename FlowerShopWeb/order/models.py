@@ -16,6 +16,7 @@ class Order(models.Model):
     delivery_address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     products = models.ManyToManyField(Flower, through='OrderProduct')
+    sum = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='СБОРКА')
     date = models.DateField()
 
