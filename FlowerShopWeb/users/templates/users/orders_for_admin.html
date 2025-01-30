@@ -3,20 +3,20 @@
  {% load my_filters %}
 
 {% block content %}
-
-
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Мои заказы</h2>
+    <h3 class="mb-4 text-center">Заказы</h3>
 
-    {% if my_orders %}
-        {% for order in my_orders|dictsortreversed:"date" %}
+    {% if orders_in_work %}
+        {% for order in orders_in_work|dictsortreversed:"date" %}
             <div class="order mb-5">
                 <div class="order-header mb-3">
                     <div><strong>№ заказа:</strong> {{ order.id }}</div>
                     <div><strong>Дата заказа:</strong> {{ order.date }}</div>
                     <div><strong>Сумма заказа:</strong> {{ order.sum }}</div>
                     <div><strong>Адрес доставки:</strong> {{ order.delivery_address }}</div>
-                    <div><strong>Статус заказа:</strong> <span class="badge bg-info">{{ order.status }}</span></div>
+                    <div><strong>Заказчик:</strong> {{order.user.name}} {{ order.user.phone }}</div>
+<!--                    <div><strong>Статус заказа:</strong> <span class="badge bg-info">{{ order.status }}</span></div>-->
+                    {% include 'users/change_status.html' %}
                 </div>
                 <div class="order-products">
                     <h5>Наименования:</h5>
@@ -33,8 +33,34 @@
                 </div>
             </div>
         {% endfor %}
-    {% else %}
-        <p class="alert alert-info text-center">У вас нет заказов.</p>
+    {% endif %}
+    {% if orders_ready_or_cancelled %}
+        {% for order in orders_ready_or_cancelled|dictsortreversed:"date" %}
+            <div class="order mb-5">
+                <div class="order-header mb-3">
+                    <div><strong>№ заказа:</strong> {{ order.id }}</div>
+                    <div><strong>Дата заказа:</strong> {{ order.date }}</div>
+                    <div><strong>Сумма заказа:</strong> {{ order.sum }}</div>
+                    <div><strong>Адрес доставки:</strong> {{ order.delivery_address }}</div>
+                    <div><strong>Заказчик:</strong> {{order.user.name}} {{ order.user.phone }}</div>
+                    {% include 'users/change_status.html' %}
+                </div>
+                <div class="order-products">
+                    <h5>Наименования:</h5>
+                    <ul class="list-unstyled">
+                        {% for product in order.products.all %}
+                            <li class="d-flex align-items-start my-2">
+                                <img src="{{ product.picture.url|slice_from_eighth }}" alt="{{ product.name }}" class="me-3" width="50">
+                                <div>
+                                    <h5 class="mt-0 mb-1 product-name">{{ product.name }}</h5> <!-- Добавляем класс для уменьшения шрифта -->
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+
     {% endif %}
 </div>
 
@@ -60,6 +86,7 @@
     .product-name {
         font-size: 0.9rem; /* Уменьшаем размер наименований товаров */
     }
+
 </style>
 
 

@@ -7,6 +7,11 @@ from django.contrib import messages
 from .forms import UserChangeForm
 from django.contrib.auth.decorators import login_required
 from order.models import Order
+from django.db.models import Q
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 
 def register(request):
     if request.method == 'POST':
@@ -59,4 +64,46 @@ def my_orders(request):
 
     return render(request, 'users/my_orders.html', {'my_orders': my_orders})
 
- if request.user.is_superuser:
+def users_orders(request):
+    if request.user.is_superuser:
+        orders_ready_or_cancelled = Order.objects.filter(
+            Q(status="ВЫПОЛНЕН") | Q(status="ОТМЕНЕН")
+        )
+        orders_in_work = Order.objects.filter(
+            Q(status="СБОРКА") | Q(status="В ПУТИ")
+        )
+
+        return render(request, 'users/orders_for_admin.html',
+                  {'orders_ready_or_cancelled': orders_ready_or_cancelled,
+                   'orders_in_work':orders_in_work})
+
+    else:
+        user = request.user
+        my_orders = Order.objects.filter(user=user)
+
+        return render(request, 'users/my_orders.html', {'my_orders': my_orders})
+
+
+@csrf_exempt  # Используйте с осторожностью, убедитесь в безопасности
+def update_order_status(request, order_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            new_status = data.get('status')
+
+            # Проверяем, является ли новый статус допустимым
+            if new_status not in ["СБОРКА", "В ПУТИ", "ВЫПОЛНЕН", "ОТМЕНЕН"]:
+                return JsonResponse({'success': False, 'error': 'Недопустимый статус'})
+
+            # Обновляем статус заказа
+            order = Order.objects.get(id=order_id)
+            order.status = new_status
+            order.save()
+
+            return JsonResponse({'success': True})
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Заказ не найден'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Неподдерживаемый метод'})

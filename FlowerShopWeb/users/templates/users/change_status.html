@@ -1,0 +1,37 @@
+<div style="width:200px">
+    <strong>Статус заказа:</strong>
+    <select id="orderStatus_{{ order.id }}" class="form-select">
+        <option value="СБОРКА" {% if order.status == "СБОРКА" %}selected{% endif %}>СБОРКА</option>
+        <option value="В ПУТИ" {% if order.status == "В ПУТИ" %}selected{% endif %}>В ПУТИ</option>
+        <option value="ВЫПОЛНЕН" {% if order.status == "ВЫПОЛНЕН" %}selected{% endif %}>ВЫПОЛНЕН</option>
+        <option value="ОТМЕНЕН" {% if order.status == "ОТМЕНЕН" %}selected{% endif %}>ОТМЕНЕН</option>
+    </select>
+    <button class="btn btn-primary mt-2" onclick="updateOrderStatus({{ order.id }})">Сохранить</button>
+</div>
+
+<script>
+function updateOrderStatus(orderId) {
+    const status = document.getElementById(`orderStatus_${orderId}`).value;
+
+    fetch(`/update-order-status/${orderId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}', // Используйте Django шаблон для получения CSRF токена
+        },
+        body: JSON.stringify({ status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Статус успешно обновлен!');
+        } else {
+            alert('Ошибка при обновлении статуса.');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка при обновлении статуса.');
+    });
+}
+</script>

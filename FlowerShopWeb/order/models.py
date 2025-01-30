@@ -7,7 +7,7 @@ from catalog.models import Flower
 class Order(models.Model):
     STATUS_CHOICES = [
         ('СБОРКА', 'На сборке'),
-        ('ДОСТАВКА', 'В доставке'),
+        ('В ПУТИ', 'В доставке'),
         ('ВЫПОЛННЕН', 'Выполнен'),
         ('ОТМЕНЕН', 'Отменен'),
     ]
