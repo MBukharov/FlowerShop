@@ -18,7 +18,7 @@ class Order(models.Model):
     products = models.ManyToManyField(Flower, through='OrderProduct')
     sum = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='СБОРКА')
-    date = models.DateField()
+    date = models.DateTimeField()
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username} at {self.date}"

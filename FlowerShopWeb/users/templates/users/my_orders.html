@@ -9,7 +9,7 @@
     <h1 class="mb-4 text-center">Мои заказы</h1>
 
     {% if my_orders %}
-        {% for order in my_orders %}
+        {% for order in my_orders|dictsortreversed:"date" %}
             <div class="order mb-5">
                 <div class="order-header mb-3">
                     <div><strong>№ заказа:</strong> {{ order.id }}</div>
