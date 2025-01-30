@@ -16,7 +16,13 @@
                     <div><strong>Дата заказа:</strong> {{ order.date }}</div>
                     <div><strong>Сумма заказа:</strong> {{ order.sum }}</div>
                     <div><strong>Адрес доставки:</strong> {{ order.delivery_address }}</div>
-                    <div><strong>Статус заказа:</strong> <span class="badge bg-info">{{ order.status }}</span></div>
+                    {% if order.status == 'ВЫПОЛНЕН' %}
+                        <div><strong>Статус заказа:</strong> <span class="badge bg-success ">{{ order.status }}</span></div>
+                    {% elif order.status == 'ОТМЕНЕН' %}
+                        <div><strong>Статус заказа:</strong> <span class="badge bg-danger">{{ order.status }}</span></div>
+                    {% else %}
+                        <div><strong>Статус заказа:</strong> <span class="badge bg-info">{{ order.status }}</span></div>
+                    {% endif %}
                 </div>
                 <div class="order-products">
                     <h5>Наименования:</h5>
