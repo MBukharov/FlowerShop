@@ -58,3 +58,5 @@ def my_orders(request):
     my_orders = Order.objects.filter(user=user)
 
     return render(request, 'users/my_orders.html', {'my_orders': my_orders})
+
+ if request.user.is_superuser:
