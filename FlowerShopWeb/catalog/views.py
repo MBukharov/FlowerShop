@@ -3,6 +3,7 @@ from .models import Flower, Cart, CartItem
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from order.forms import OrderForm
 from django.views.decorators.http import require_POST
 # Create your views here.
 
@@ -36,5 +37,6 @@ def remove_from_cart(request, product_id):
 def cart_detail(request):
     cart = get_object_or_404(Cart, user=request.user)
     total_sum = sum(item.product.price * item.quantity for item in cart.items.all())
-    return render(request, 'catalog/cart_detail.html', {'cart': cart, 'total_sum': total_sum})
+    form = OrderForm(user=request.user)
+    return render(request, 'catalog/cart_detail.html', {'cart': cart, 'total_sum': total_sum, 'form': form})
 

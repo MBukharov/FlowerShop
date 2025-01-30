@@ -5,6 +5,8 @@
 {% load humanize %}
 {% block content%}
 
+
+
 <div class="container mt-5">
     <h2 class="mb-4">Корзина</h2>
     {% if cart.items.all %}
@@ -25,6 +27,32 @@
         <div class="alert alert-info">
             <strong> Общая сумма: <span style="margin-left:20px">{{ total_sum|intcomma }} руб.</span></strong>
         </div>
+    <form action="{% url 'make_order' %}" method="POST" class="p-3">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div style="text-align:center">
+                <button  type="submit" class="btn btn-primary">Заказать</button>
+            </div>
+    </form>
+
+    {% elif messages %}
+        <ul class="list-group">
+            {% for message in messages %}
+                <li class="list-group-item
+                           {% if message.tags == 'error' %}
+                               list-group-item-danger
+                           {% elif message.tags == 'success' %}
+                               list-group-item-success
+                           {% elif message.tags == 'warning' %}
+                               list-group-item-warning
+                           {% elif message.tags == 'info' %}
+                               list-group-item-info
+                           {% endif %}">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+
     {% else %}
         <div class="alert alert-warning" role="alert">
             Ваша корзина пуста.
@@ -32,5 +60,7 @@
     {% endif %}
     <a href="{% url 'catalog' %}" class="btn btn-primary">Продолжить покупки</a>
 </div>
+
+
 
 {% endblock %}
