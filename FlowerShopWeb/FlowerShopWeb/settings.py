@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'catalog',
+    'order',
     'django.contrib.humanize',
     'users.apps.UsersConfig',
     'django.contrib.admin',
