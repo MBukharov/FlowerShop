@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.db import transaction
@@ -7,6 +7,10 @@ from .models import Order, OrderProduct
 from .forms import OrderForm
 from django.utils import timezone
 from django.contrib import messages
+from FlowerShopTG_bot.tg_bot_for_admin import send_order_to_admin
+import asyncio
+from multiprocessing import Process
+
 
 # Create your views here.
 @login_required
@@ -47,10 +51,31 @@ def make_order(request):
                 )
                 # print(f"{item.product.name} x {item.quantity} for Order {order.id}")
 
+            products_name = [item.product.name + ' ' + str(item.quantity) + ' шт.' for item in cart_items]
+            message = (f"Заказ {order.id}, сумма {order.sum} руб., товары: {products_name}\n"
+                      f"Адрес доставки: {order.delivery_address}, телефон заказчика {order.phone_number}")
+
+            process = Process(target=run_event_loop_with_task, args=(message,))
+            process.start()
+
+
             # Очищаем корзину
             cart_items.delete()
 
         # Добавляем сообщение для пользователя
         messages.success(request, "Вы успешно сделали заказ. Менеджер свяжется с вами в ближайшее время для подтверждения заказа.")
 
-    return redirect('cart_detail')
+
+        return redirect('cart_detail')
+
+
+def run_event_loop_with_task(message):
+    async def func():
+        await send_order_to_admin(message)
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(func())
+    finally:
+        loop.close()
