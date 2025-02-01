@@ -35,8 +35,12 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def cart_detail(request):
-    cart = get_object_or_404(Cart, user=request.user)
-    total_sum = sum(item.product.price * item.quantity for item in cart.items.all())
+    try:
+        cart = get_object_or_404(Cart, user=request.user)
+        total_sum = sum(item.product.price * item.quantity for item in cart.items.all())
+    except:
+        cart = None
+        total_sum = None
     form = OrderForm(user=request.user)
     return render(request, 'catalog/cart_detail.html', {'cart': cart, 'total_sum': total_sum, 'form': form})
 

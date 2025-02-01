@@ -55,8 +55,7 @@ def make_order(request):
             message = (f"Заказ {order.id}, сумма {order.sum} руб., товары: {products_name}\n"
                       f"Адрес доставки: {order.delivery_address}, телефон заказчика {order.phone_number}")
 
-            process = Process(target=run_event_loop_with_task, args=(message,))
-            process.start()
+            send_telegram_message(message)
 
 
             # Очищаем корзину
@@ -69,13 +68,12 @@ def make_order(request):
         return redirect('cart_detail')
 
 
-def run_event_loop_with_task(message):
-    async def func():
-        await send_order_to_admin(message)
-
+def send_telegram_message(message_text):
+    # Создаем новый event loop
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
+
     try:
-        loop.run_until_complete(func())
+        loop.run_until_complete(send_order_to_admin(message_text))
     finally:
         loop.close()
