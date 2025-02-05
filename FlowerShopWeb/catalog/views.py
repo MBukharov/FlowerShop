@@ -9,6 +9,8 @@ from django.views.decorators.http import require_POST
 
 def catalog(request):
     flowers = Flower.objects.all()
+    for flower in flowers:
+        print(str(flower))
     return render(request, 'catalog/catalog.html', {'flowers': flowers})
 
 @login_required

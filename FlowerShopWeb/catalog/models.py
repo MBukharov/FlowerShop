@@ -6,7 +6,7 @@ class Flower(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название товара")
     description = models.TextField(verbose_name="Описание")
     price = models.DecimalField(verbose_name="Цена", max_digits=10, decimal_places=2)
-    quantity = models.IntegerField(verbose_name="Доступно к заказу")
+    availability = models.IntegerField(verbose_name="Доступно к заказу")
     picture = models.ImageField(upload_to = 'catalog/static/catalog/img', verbose_name="Изображение")
 
     def __str__(self):
